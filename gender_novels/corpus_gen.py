@@ -47,7 +47,7 @@ def generate_corpus_gutenberg():
         cache.populate()
         print("Done populating cache")
     # go through all books in Keith's thing
-    bookshelf = str(Path(current_dir, INITIAL_BOOK_STORE, r"*.txt"))
+    bookshelf = str(Path(INITIAL_BOOK_STORE, r"*.txt"))
     print("Searching folder", bookshelf)
     books = glob.iglob(bookshelf)
     number_books = 0
