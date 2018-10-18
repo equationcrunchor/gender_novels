@@ -34,12 +34,12 @@ def generate_corpus_gutenberg():
 
     # determine current directory
     current_dir = os.path.abspath(os.path.dirname(__file__))
-    print("Current directory:",current_dir)
+    # print("Current directory:",current_dir)
     # write csv header
     with open(Path(current_dir, GUTENBERG_METADATA_PATH), 'w', newline='') as csvfile:
         writer = csv.DictWriter(csvfile, fieldnames=METADATA_LIST)
         writer.writeheader()
-        print("Wrote metadata header")
+        # print("Wrote metadata header")
     # check if cache is populated, if it isn't, populates it
     cache = get_metadata_cache()
     if (not cache.exists):
@@ -51,51 +51,51 @@ def generate_corpus_gutenberg():
     print("Searching folder", bookshelf)
     books = glob.iglob(bookshelf)
     number_books = 0
-    print('')
+    # print('')
     start_time = time.time()
     for book in books:
         try:
             number_books += 1
-            start_book = time.time()
-            print("Filepath:", book)
+            # start_book = time.time()
+            # print("Filepath:", book)
             # get the book's id
             gutenberg_id = get_gutenberg_id(book)
-            print("ID:", gutenberg_id)
+            # print("ID:", gutenberg_id)
             # check if book is valid novel by our definition
             if (not is_valid_novel_gutenberg(gutenberg_id, book)):
-                print("Not a novel")
-                print("Time for this book:", time.time() - start_book, "seconds")
-                print('')
+                # print("Not a novel")
+                # print("Time for this book:", time.time() - start_book, "seconds")
+                # print('')
                 continue
             # begin compiling metadata.  Metadata not finalized
             novel_metadata = {'gutenberg_id': gutenberg_id, 'corpus_name': 'gutenberg'}
             author = get_author_gutenberg(gutenberg_id)
-            print("Author:", author)
+            # print("Author:", author)
             novel_metadata['author'] = author
             title = get_title_gutenberg(gutenberg_id)
-            print("Title:",title)
+            # print("Title:",title)
             novel_metadata['title'] = title
             novel_metadata['date'] = get_publication_date(author, title, book, gutenberg_id)
-            print("Date:",novel_metadata['date'])
+            # print("Date:",novel_metadata['date'])
             novel_metadata['country_publication'] = get_country_publication(author,
                 title)
-            print("Country:",novel_metadata['country_publication'])
+            # print("Country:",novel_metadata['country_publication'])
             novel_metadata['author_gender'] = get_author_gender(author)
-            print("Author Gender:",novel_metadata['author_gender'])
+            # print("Author Gender:",novel_metadata['author_gender'])
             novel_metadata['subject'] = get_subject_gutenberg(gutenberg_id)
-            print("Subjects:",novel_metadata['subject'])
+            # print("Subjects:",novel_metadata['subject'])
             # write to csv
             write_metadata(novel_metadata)
-            print("wrote metadata")
+            # print("wrote metadata")
             # copy text file to new folder
             copyfile(book, Path(current_dir, FINAL_BOOK_STORE, str(gutenberg_id) + r".txt"))
-            print("Copied book")
-            print("Time for this book:",time.time()-start_book, "seconds")
-            print('')
+            # print("Copied book")
+            # print("Time for this book:",time.time()-start_book, "seconds")
+            # print('')
         except Exception as exception:
-            print("Ran into exception:", type(exception))
-            print(exception)
-            print("")
+            # print("Ran into exception:", type(exception))
+            # print(exception)
+            # print("")
             continue
     end_time = time.time()
     print("Done!")
@@ -155,26 +155,26 @@ def is_valid_novel_gutenberg(gutenberg_id, filepath):
     TODO: increase selectivity (Federalist Papers still failing doctest)
     """
     title = get_title_gutenberg(gutenberg_id)
-    print(title)
+    # print(title)
     if language_invalidates_entry(gutenberg_id):
-        print("Not in English")
+        # print("Not in English")
         return False
     if rights_invalidate_entry(gutenberg_id):
-        print("Not public domain")
+        # print("Not public domain")
         return False
     if subject_invalidates_entry(gutenberg_id):
-        print("Bad subject")
+        # print("Bad subject")
         return False
     if date_invalidates_entry(gutenberg_id, filepath):
-        print("Not in date range")
+        # print("Not in date range")
         return False
     # title = get_title_gutenberg(gutenberg_id)
     if title_invalidates_entry(title):
-        print("Invalid title")
+        # print("Invalid title")
         return False
     text = get_novel_text_gutenberg_with_boilerplate(filepath)
     if text_invalidates_entry(text):
-        print("Something wrong with text")
+        # print("Something wrong with text")
         return False
     return True
 
@@ -280,13 +280,13 @@ def title_invalidates_entry(title):
     """
     title = title.lower()
     if (title.find("index of the project gutenberg ") != -1):
-        # print("Was an index")
+        # # print("Was an index")
         return True
     if (title.find("complete project gutenberg") != -1):
-        # print("Was a compilation thing")
+        # # print("Was a compilation thing")
         return True
     if (title.find("translated by ") != -1):
-        # print("Was a translation")
+        # # print("Was a translation")
         return True
     return False
 
